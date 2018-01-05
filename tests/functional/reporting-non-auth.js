@@ -287,6 +287,25 @@ define(
           .end();
       },
 
+      "multiple details params add info to description": function() {
+        return FunctionalHelpers.openPage(
+          this,
+          url("/issues/new?details=" + DETAILS_STRING + "&details=wowow"),
+          "#description"
+        )
+          .findByCssSelector("#steps_reproduce")
+          .getProperty("value")
+          .then(function(text) {
+            assert.include(
+              text,
+              "Encountered error: NS_ERROR_DOM_MEDIA_DEMUXER_ERR (0x806e000c)\nLocation: virtual\nRefPtrMP4Demuxer::InitPromise mozilla::MP4Demuxer::Init()\nError information:\nIncomplete MP4 metadata\nMedia URL: file:///Users/potch/Documents/mozilla/media.mp4"
+            );
+
+            assert.include(text, "wowow");
+          })
+          .end();
+      },
+
       "details param: + decoded as space": function() {
         return FunctionalHelpers.openPage(
           this,
